@@ -8,3 +8,4 @@ spring:
 app:
   enableScheduledProducer: false
   enableEmployeeJsonProducer: false
+  enableHumanResourceProducer: true

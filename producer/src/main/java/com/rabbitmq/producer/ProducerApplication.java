@@ -54,11 +54,15 @@ public class ProducerApplication implements CommandLineRunner {
 			}
 		}
 
-		// publish to exchange, FANOUT EXCHANGE
-		/*for(int i=1; i<=5; i++) {
-			Employee employee = new Employee("name "+i, "empID "+i, LocalDate.now());
-			humanResourceProducer.publishToExchange(employee);
-		}*/
+		if(applicationConfig.isEnableHumanResourceProducer()) {
+
+            // publish to exchange, FANOUT EXCHANGE.
+            // routing key is not required, as FANOUT sends to all binded queues.
+		    for(int i=1; i<=5; i++) {
+                Employee employee = new Employee("name " + i, "empID " + i, LocalDate.now());
+                humanResourceProducer.publishToExchange(employee);
+            }
+        }
 
 		// publish to exchange, DIRECT EXCHANGE
 		/*for(int i=1; i<=5; i++) {
