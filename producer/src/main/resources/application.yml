@@ -5,3 +5,6 @@ spring:
             username: guest
             password: guest
 
+app:
+  enableScheduledProducer: false
+  enableEmployeeJsonProducer: false

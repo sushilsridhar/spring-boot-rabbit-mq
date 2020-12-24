@@ -1,10 +1,12 @@
 package com.rabbitmq.producer;
 
+import config.ApplicationConfig;
 import entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import service.EmployeeJsonProducer;
@@ -16,8 +18,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
-@ComponentScan("service")
-//@EnableScheduling --> Scheduled publishing
+@ComponentScan(basePackages = {"service", "entity", "config"})
+@EnableConfigurationProperties(ApplicationConfig.class)
 public class ProducerApplication implements CommandLineRunner {
 
 	@Autowired
@@ -28,6 +30,9 @@ public class ProducerApplication implements CommandLineRunner {
 
 	@Autowired
 	private PictureProducer pictureProducer;
+
+	@Autowired
+	private ApplicationConfig applicationConfig;
 
 	private final List<String> SOURCES = Arrays.asList("mobile", "web");
 	private final List<String> TYPES = Arrays.asList("jpg", "png", "svg");
@@ -40,10 +45,13 @@ public class ProducerApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		// Publishing in JSON format
-		for(int i=1; i<=5; i++) {
-			Employee employee = new Employee("name "+i, "empID "+i, LocalDate.now());
-			employeeJsonProducer.sendMessage(employee);
+		if(applicationConfig.isEnableEmployeeJsonProducer()) {
+
+			// Publishing in JSON format
+			for(int i=1; i<=5; i++) {
+				Employee employee = new Employee("name "+i, "empID "+i, LocalDate.now());
+				employeeJsonProducer.sendMessage(employee);
+			}
 		}
 
 		// publish to exchange, FANOUT EXCHANGE
