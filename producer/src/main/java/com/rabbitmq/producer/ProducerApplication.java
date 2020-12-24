@@ -1,5 +1,6 @@
 package com.rabbitmq.producer;
 
+import entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -9,18 +10,15 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import service.EmployeeJsonProducer;
 import service.HumanResourceProducer;
 import service.PictureProducer;
-import service.ScheduledProducer;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
 @ComponentScan("service")
-@EnableScheduling
+//@EnableScheduling --> Scheduled publishing
 public class ProducerApplication implements CommandLineRunner {
-
-	@Autowired
-	private ScheduledProducer scheduledService;
 
 	@Autowired
 	private EmployeeJsonProducer employeeJsonProducer;
@@ -42,14 +40,11 @@ public class ProducerApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		// Scheduled publishing
-		// scheduledService.sendHello();
-
 		// Publishing in JSON format
-		/*for(int i=1; i<=5; i++) {
+		for(int i=1; i<=5; i++) {
 			Employee employee = new Employee("name "+i, "empID "+i, LocalDate.now());
 			employeeJsonProducer.sendMessage(employee);
-		}*/
+		}
 
 		// publish to exchange, FANOUT EXCHANGE
 		/*for(int i=1; i<=5; i++) {
