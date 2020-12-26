@@ -2,13 +2,13 @@ package com.rabbitmq.producer;
 
 import config.ApplicationConfig;
 import entity.Employee;
+import entity.Picture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import service.EmployeeJsonProducer;
 import service.HumanResourceProducer;
 import service.PictureProducer;
@@ -16,6 +16,7 @@ import service.PictureProducer;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"service", "entity", "config"})
@@ -64,18 +65,21 @@ public class ProducerApplication implements CommandLineRunner {
             }
         }
 
-		// publish to exchange, DIRECT EXCHANGE
-		/*for(int i=1; i<=5; i++) {
-			Picture picture = new Picture();
+        if(applicationConfig.isEnablePictureProducer()) {
 
-			picture.setName("name "+i);
-			picture.setSize(ThreadLocalRandom.current().nextLong(1, 10001));
-			picture.setSource(SOURCES.get(i % SOURCES.size()));
-			picture.setType(TYPES.get(i % TYPES.size()));
+			// publish to exchange, DIRECT EXCHANGE
+			// multiple queues are binded to exchange, send messages only to matching routing key.
+			for(int i=1; i<=5; i++) {
+				Picture picture = new Picture();
+
+				picture.setName("name "+i);
+				picture.setSize(ThreadLocalRandom.current().nextLong(1, 10001));
+				picture.setSource(SOURCES.get(i % SOURCES.size()));
+				picture.setType(TYPES.get(i % TYPES.size()));
 
 
-			pictureProducer.sendMessage(picture);
-		}*/
-
+				pictureProducer.sendMessage(picture);
+			}
+		}
 	}
 }
