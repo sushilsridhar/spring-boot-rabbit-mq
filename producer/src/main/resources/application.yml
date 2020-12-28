@@ -9,4 +9,5 @@ app:
   enableScheduledProducer: false
   enableEmployeeJsonProducer: false
   enableHumanResourceProducer: false
-  enablePictureProducer: true
+  enablePictureProducer: false
+  enablePictureProducerTopicExchange: true

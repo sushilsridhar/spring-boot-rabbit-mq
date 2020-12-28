@@ -12,4 +12,5 @@ public class ApplicationConfig {
     private boolean enableEmployeeJsonProducer;
     private boolean enableHumanResourceProducer;
     private boolean enablePictureProducer;
+    private boolean enablePictureProducerTopicExchange;
 }

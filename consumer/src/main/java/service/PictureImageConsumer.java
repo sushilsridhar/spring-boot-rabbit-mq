@@ -19,7 +19,7 @@ public class PictureImageConsumer {
     public void listen(String pictureMessage) {
         try {
             Picture picture = objectMapper.readValue(pictureMessage, Picture.class);
-            log.info("the sent image picture is: {}", picture);
+            log.info("image queue - the sent jpg/png image picture is: {}", picture);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

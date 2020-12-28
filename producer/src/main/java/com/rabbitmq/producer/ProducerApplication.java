@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import service.EmployeeJsonProducer;
 import service.HumanResourceProducer;
 import service.PictureProducer;
+import service.PictureProducerTopicExchange;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -31,6 +32,9 @@ public class ProducerApplication implements CommandLineRunner {
 
 	@Autowired
 	private PictureProducer pictureProducer;
+
+	@Autowired
+	private PictureProducerTopicExchange pictureProducerTopicExchange;
 
 	@Autowired
 	private ApplicationConfig applicationConfig;
@@ -79,6 +83,24 @@ public class ProducerApplication implements CommandLineRunner {
 
 
 				pictureProducer.sendMessage(picture);
+			}
+		}
+
+		if(applicationConfig.isEnablePictureProducerTopicExchange()) {
+
+			// publish to exchange, TOPIC EXCHANGE
+			// multiple queues are binded to exchange, send messages only to matching routing key.
+			// routing key is in format *.*.* -> * can be any word
+			for(int i=1; i<=5; i++) {
+				Picture picture = new Picture();
+
+				picture.setName("name "+i);
+				picture.setSize(ThreadLocalRandom.current().nextLong(1, 10001));
+				picture.setSource(SOURCES.get(i % SOURCES.size()));
+				picture.setType(TYPES.get(i % TYPES.size()));
+
+
+				pictureProducerTopicExchange.sendMessage(picture);
 			}
 		}
 	}
