@@ -13,4 +13,5 @@ public class ApplicationConfig {
     private boolean enableHumanResourceProducer;
     private boolean enablePictureProducer;
     private boolean enablePictureProducerTopicExchange;
+    private boolean enableMyPictureProducer;
 }

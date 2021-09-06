@@ -10,4 +10,5 @@ app:
   enableEmployeeJsonProducer: false
   enableHumanResourceProducer: false
   enablePictureProducer: false
-  enablePictureProducerTopicExchange: true
+  enablePictureProducerTopicExchange: false
+  enableMyPictureProducer: true

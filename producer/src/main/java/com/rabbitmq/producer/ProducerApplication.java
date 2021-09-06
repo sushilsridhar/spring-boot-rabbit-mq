@@ -9,10 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
-import service.EmployeeJsonProducer;
-import service.HumanResourceProducer;
-import service.PictureProducer;
-import service.PictureProducerTopicExchange;
+import service.*;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -35,6 +32,9 @@ public class ProducerApplication implements CommandLineRunner {
 
 	@Autowired
 	private PictureProducerTopicExchange pictureProducerTopicExchange;
+
+	@Autowired
+	private MyPictureProducer myPictureProducer;
 
 	@Autowired
 	private ApplicationConfig applicationConfig;
@@ -101,6 +101,21 @@ public class ProducerApplication implements CommandLineRunner {
 
 
 				pictureProducerTopicExchange.sendMessage(picture);
+			}
+		}
+
+		if(applicationConfig.isEnableMyPictureProducer()) {
+
+			for(int i=1; i<=5; i++) {
+				Picture picture = new Picture();
+
+				picture.setName("name "+i);
+				picture.setSize(ThreadLocalRandom.current().nextLong(9001, 10001));
+				picture.setSource(SOURCES.get(i % SOURCES.size()));
+				picture.setType(TYPES.get(i % TYPES.size()));
+
+
+				myPictureProducer.sendMessage(picture);
 			}
 		}
 	}
